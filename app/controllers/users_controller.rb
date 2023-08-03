@@ -1,7 +1,10 @@
 class UsersController < ApplicationController
   def index
-    @users = User.all
+    binding.pry
+    @users  = User.all
+  end
 
-    render json: @users
+  def show
+    @user = User.find(params[:id])
   end
 end
