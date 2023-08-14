@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_14_071751) do
+ActiveRecord::Schema.define(version: 2023_08_14_094221) do
 
   create_table "articles", charset: "utf8mb3", force: :cascade do |t|
     t.string "title"
@@ -19,6 +19,30 @@ ActiveRecord::Schema.define(version: 2023_08_14_071751) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_articles_on_user_id"
+  end
+
+  create_table "communities", charset: "utf8mb3", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "user_communities", charset: "utf8mb3", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "community_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["community_id"], name: "index_user_communities_on_community_id"
+    t.index ["user_id"], name: "index_user_communities_on_user_id"
+  end
+
+  create_table "user_details", charset: "utf8mb3", force: :cascade do |t|
+    t.datetime "birthday"
+    t.string "phone_number"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_user_details_on_user_id"
   end
 
   create_table "users", charset: "utf8mb3", force: :cascade do |t|
@@ -30,4 +54,7 @@ ActiveRecord::Schema.define(version: 2023_08_14_071751) do
   end
 
   add_foreign_key "articles", "users"
+  add_foreign_key "user_communities", "communities"
+  add_foreign_key "user_communities", "users"
+  add_foreign_key "user_details", "users"
 end
