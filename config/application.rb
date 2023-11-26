@@ -23,7 +23,7 @@ module HelloWorldRails
       g.javascripts false
       g.stylesheets false
       g.helper false
-      g.test_framework false
+      g.test_framework :rspec
       g.template_engine false
     end
 
