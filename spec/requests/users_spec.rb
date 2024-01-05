@@ -57,7 +57,30 @@ RSpec.describe "Users", type: :request do
   end
 
   describe "POST /users" do
-    it "ユーザーのレコードを作成できる" do
+    subject { post(users_path, params: params)}
+    context "適切なパラメータを送信したとき" do
+      let(:params) {{ user: attributes_for(:user)}}
+      it "ユーザーのレコードを作成できる" do
+        expect{ subject }.to change{ User.count}.by(1)
+
+        res = JSON.parse(response.body)
+        expect(res["name"]).to eq params[:user][:name]
+        expect(res["account"]).to eq params[:user][:account]
+        expect(res["email"]).to eq params[:user][:email]
+
+        expect(response).to have_http_status(200)
+        binding.pry
+      end
+    end
+
+    context "不適切なパラメータを送信したとき" do
+      let(:params) { attributes_for(:user) }
+
+      fit "エラーする" do
+        # binding.pry
+        # subject
+        expect{ subject }.to raise_error(ActionController::ParameterMissing)
+      end
     end
   end
 
