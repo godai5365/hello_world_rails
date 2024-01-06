@@ -76,7 +76,7 @@ RSpec.describe "Users", type: :request do
     context "不適切なパラメータを送信したとき" do
       let(:params) { attributes_for(:user) }
 
-      fit "エラーする" do
+      it "エラーする" do
         # binding.pry
         # subject
         expect{ subject }.to raise_error(ActionController::ParameterMissing)
@@ -85,7 +85,26 @@ RSpec.describe "Users", type: :request do
   end
 
   describe "PATCH /users/:id" do
-    it "任意のユーザーレコードを更新できる" do
+    subject{ patch(user_path(user_id), params: params) }
+
+    let(:params) do
+      # { user: { name: "fff", create_at: 1.day.ago } }
+      { user: { name: Faker::Name.name, create_at: 1.day.ago } }
+    end
+    let(:user_id){ user.id}
+    let(:user){ create(:user)}
+
+    fit "任意のユーザーレコードを更新できる" do
+      # expect{ subject }.to change {User.find(user_id).name}.from(user.name).to(params[:user][:name]) &
+      #                       not_change { User.find(user_id).account } &
+      #                       not_change { User.find(user_id).email } &
+      #                       not_change { User.find(user_id).created_at }
+
+      expect{ subject }.to change { user.reload.name }.from(user.name).to(params[:user][:name]) &
+                            not_change { user.reload.account } &
+                            not_change { user.reload.email } &
+                            not_change { user.reload.created_at }
+
     end
   end
 
