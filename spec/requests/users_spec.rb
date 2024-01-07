@@ -94,7 +94,7 @@ RSpec.describe "Users", type: :request do
     let(:user_id){ user.id}
     let(:user){ create(:user)}
 
-    fit "任意のユーザーレコードを更新できる" do
+    it "任意のユーザーレコードを更新できる" do
       # expect{ subject }.to change {User.find(user_id).name}.from(user.name).to(params[:user][:name]) &
       #                       not_change { User.find(user_id).account } &
       #                       not_change { User.find(user_id).email } &
@@ -109,7 +109,12 @@ RSpec.describe "Users", type: :request do
   end
 
   describe "DELETE /users/:id" do
-    it "任意のユーザーレコードを削除できる" do
+    subject{ delete(user_path(user_id)) }
+    let(:user_id){ user.id }
+    let!(:user){ create(:user) }
+
+    fit "任意のユーザーレコードを削除できる" do
+      expect{ subject }.to change{ User.count }.by(-1)
     end
   end
 end
